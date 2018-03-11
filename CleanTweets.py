@@ -1,5 +1,10 @@
 import re, string, csv
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk.tokenize import word_tokenize
 
+
+stemmer = PorterStemmer()
+stop_words = open('StopWords.txt')
 
 
 def clean(rawtweet):
@@ -23,6 +28,12 @@ def clean(rawtweet):
         tweet = re.sub('[\s]+', ' ', tweet)                             # Remove additional white spaces
         tweet = tweet.strip('\'"').strip()                              # trim
         tweet = tweet.encode('ascii', 'ignore')
+
+        # word_tokens = word_tokenize(tweet)
+        # filtered_tweet = [w for w in word_tokens if not w in stop_words]
+        # for w in word_tokens:
+        #     if w not in stop_words:
+        #         filtered_tweet.append(w)
 
     except Exception as e:
         print e

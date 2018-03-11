@@ -59,10 +59,14 @@ class CustomStreamListener(tweepy.StreamListener):
 
 def main():
     print ('in main.....')
-    consumer_key = "nFu2HqrelkEiax0L5Lh4Sw"
-    consumer_secret = "6OUaIfj0ECfeJD24CVlDrcc1qqajnHBgsB7b6RPmvA"
-    access_token = "1193875656-G3iatRJ18tCCFTf8x06kV5B6XwdWbja4S4DVXDL"
-    access_token_secret = "IGOxuEQYeTREpGkL4F5LkdYNxUPLFo0zBjX3Yfdg8g"
+    # consumer_key = "nFu2HqrelkEiax0L5Lh4Sw"
+    consumer_key = "2yIo9afkmT8nDRhuwAdPvwXuR"
+    # consumer_secret = "6OUaIfj0ECfeJD24CVlDrcc1qqajnHBgsB7b6RPmvA"
+    consumer_secret = "DHh9B4En6yJgDi9UrIy7433gR33qEUIY8bQOmDosC5Wnwb0fCb"
+    # access_token = "1193875656-G3iatRJ18tCCFTf8x06kV5B6XwdWbja4S4DVXDL"
+    access_token = "1397640175-YXE7NKebRp1h64UTd1sJu7hhsEtgsU9y4s9yW6b"
+    # access_token_secret = "IGOxuEQYeTREpGkL4F5LkdYNxUPLFo0zBjX3Yfdg8g"
+    access_token_secret = "Fztu1fZQDABGT5QFR8Ss4T5AlcGC14PPxc9BtgKGKwoBb"
 
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
@@ -71,11 +75,9 @@ def main():
     print ("Establishing stream...\n")
     sapi = tweepy.streaming.Stream(auth, CustomStreamListener(maxnum=0))
 
-    setTerms = ['bottleneck', 'block', 'delay', 'excess', 'congestion', 'blockage', 'delayline', 'jam', 'rush', 'hour',
-                'traffic', 'stoppage', 'backup', 'snarl-up', 'hindrance', 'entanglement', 'holdup', 'problem',
-                'mobbing', 'logjam', 'line', 'roadblock', 'deadlock', 'stalemate', 'obstruction', 'cramming',
-                'stagnation', '1and', 'slow', 'down', 'log-jam', 'queue', 'gridlock', 'slow-up', 'tie-up', 'tailback',
-                'accident', 'crash', 'crowd']
+    setTerms = ['bottleneck', 'block', 'congestion', 'blockage', 'delay', 'jam', 'rush', 'traffic', 'stoppage', 'backup',
+                'hindrance', 'problem', 'logjam', 'line', 'roadblock', 'deadlock', 'obstruction', 'slow', 'queue',
+                'gridlock', 'slow', 'accident', 'crash', 'crowd']
     print ('1')
     sapi.filter(None, setTerms, locations=[68.14712,23.63936,97.34466,28.20453], languages=["en"])
     print('2')

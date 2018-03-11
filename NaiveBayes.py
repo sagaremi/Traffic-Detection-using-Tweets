@@ -1,16 +1,14 @@
-import sys
-import csv
-import tweepy
-import re
+import csv, re, string, os
 import nltk
-import string
-from nltk.classify import *
-from tweepy.streaming import StreamListener
-from tweepy import OAuthHandler
-from tweepy import Stream
 from nltk.corpus import stopwords
 import nltk.classify.util
-from Test import Test
+from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.stem.porter import PorterStemmer
+from autocorrect import spell
+from Spell import correction
+
+
+stemmer = PorterStemmer()
 
 
 def featureExtraction():
@@ -32,7 +30,10 @@ def getFeatureVector(tweet):
     for w in words:
         w = replaceTwoOrMore(w)  # replace two or more with two occurrences
         w = w.strip('\'"?,.')  # strip punctuation
+        w = correction(w)
+        w = stemmer.stem(w)     #stem
         val = re.search(r"^[a-zA-Z][a-zA-Z0-9]*$", w)  # check if the word starts with an alphabet
+
         if (w in stopWords or val is None):  # ignore if it is a stop word
             continue
         else:
@@ -81,56 +82,96 @@ def extract_features(tweet):
     return features
 
 
+
+
+
+dict = {}
+
+# def tokenize(text):
+#     tokens = nltk.word_tokenize(text)
+#     stems = []
+#     for item in tokens:
+#         stems.append(PorterStemmer().stem(item))
+#     return stems
+
+# for dirpath, dirs, files in os.walk(path):
+#     for f in files:
+#         fname = os.path.join(dirpath, f)
+#         print "fname=", fname
+# with open('dataset.csv') as pearl:
+#     text = pearl.read()
+#     dict[1] = text
+#
+# tfidf = TfidfVectorizer(tokenizer=tokenize, stop_words='english')
+# tfs = tfidf.fit_transform(dict.values())
+#
+# str = 'all great and precious things are lonely.'
+# response = tfidf.transform([str])
+# print response
+#
+# feature_names = tfidf.get_feature_names()
+# for col in response.nonzero()[1]:
+#     print feature_names[col], ' - ', response[0, col]
+
+
+
+
+
+
+
+
+
+
+
+
+
 stopWords = getStopWordList('StopWords.txt')
 tweets = featureExtraction()
 word_features = get_word_features(get_words_in_tweets(tweets))  # my list of many words
-
-# extract feature vector for all tweets in one shot
-training_set = nltk.classify.apply_features(extract_features, tweets[:-250])
-test_set = nltk.classify.apply_features(extract_features, tweets[-250:])
-
-# ****** Naive Bayes Classifier******************************************
-
-classifier = nltk.NaiveBayesClassifier.train(training_set)
-
-accuracy = nltk.classify.accuracy(classifier, training_set)
-print (accuracy)
-
-total = accuracy * 100
-print ('Naive Bayes Accuracy: %4.2f' % total)
-
-# Accuracy Test Set
-accuracyTestSet = nltk.classify.accuracy(classifier, test_set)
-print (accuracyTestSet)
-
-totalTest = accuracyTestSet * 100
-print ('\nNaive Bayes Accuracy with the Test Set: %4.2f' % totalTest)
-
-print ('\nInformative features')
-print (classifier.show_most_informative_features(n=15))
-# **************************
-
-
-
-var = ''
-while (var != 'exit'):
-    try:
-        input = input('\nPlease write a sentence to be tested sentiment. If you type - exit- the program will exit \n')
-        print ('\n')
-        if input == 'exit':
-            print ('Exiting the program')
-            var = 'exit'
-            # break
-        else:
-            input = input.lower()
-            input = input.split()
-
-            print ('\nNaive Bayes Classifier')
-            print (
-            'I think that the sentiment was ' + classifier.classify(extract_features(input)) + ' in that sentence.\n')
-    except Exception as e:
-        print e
-        continue
-
-
-
+#
+# # extract feature vector for all tweets in one shot
+# training_set = nltk.classify.apply_features(extract_features, tweets)
+# test_set = nltk.classify.apply_features(extract_features, tweets[:250])
+#
+# # ****** Naive Bayes Classifier******************************************
+#
+# classifier = nltk.NaiveBayesClassifier.train(training_set)
+#
+# accuracy = nltk.classify.accuracy(classifier, training_set)
+# print (accuracy)
+#
+# total = accuracy * 100
+# print ('Naive Bayes Accuracy: %4.2f' % total)
+#
+# # Accuracy Test Set
+# accuracyTestSet = nltk.classify.accuracy(classifier, test_set)
+# print (accuracyTestSet)
+#
+# totalTest = accuracyTestSet * 100
+# print ('\nNaive Bayes Accuracy with the Test Set: %4.2f' % totalTest)
+#
+# print ('\nInformative features')
+# print (classifier.show_most_informative_features(n=15))
+# # **************************
+#
+#
+#
+# var = ''
+# while (var != 'exit'):
+#     try:
+#         input = input('\nPlease write a sentence to be tested sentiment. If you type - exit- the program will exit \n')
+#         print ('\n')
+#         if input == 'exit':
+#             print ('Exiting the program')
+#             var = 'exit'
+#             # break
+#         else:
+#             input = input.lower()
+#             input = input.split()
+#
+#             print ('\nNaive Bayes Classifier')
+#             print (
+#             'I think that the sentiment was ' + classifier.classify(extract_features(input)) + ' in that sentence.\n')
+#     except Exception as e:
+#         print e
+#         continue
