@@ -17,7 +17,7 @@ def clean(rawtweet):
                                    flags=re.UNICODE)
 
         tweet = rawtweet.lower()
-        tweet = re.sub('((www\.[\s]+)|(https?://[^\s]+))', '', tweet)   
+        tweet = re.sub('((www\.[\s]+)|(https?://[^\s]+))', '', tweet)   # remove www.* or https?://* (URL)
         tweet = re.sub('@[^\s]+', '', tweet)                            # remove @username
         tweet = re.sub(r'#([^\s]+)', r'\1', tweet)                      # Replace #word with word Handling hashtags
         tweet = re.sub(punctuationPattern, '', tweet)                   # Remove punctuations
